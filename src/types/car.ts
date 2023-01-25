@@ -1,5 +1,5 @@
 type Car = {
-    id: number,
+    id: string,
     price: number,
     year: number,
     modelId: string,

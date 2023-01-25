@@ -1,4 +1,6 @@
-const cars = [
+import Car from '../types/car';
+
+const cars: Car[] = [
   {
     id: '05EE7E0B-B68C-F3AC-669C-CEA245B88118',
     price: 12484,
