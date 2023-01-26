@@ -4,6 +4,13 @@ import brands from '../data/brands';
 import models from '../data/models';
 import CarsCollection from '../helpers/cars-collection';
 import stringifyProps from '../helpers/stringify-obj';
+import SelectField, { type Option } from './select-field';
+import type Brand from '../types/brand';
+
+const brandToOption = ({ id, title }: Brand): Option => ({
+  value: id,
+  title,
+});
 
 class App {
   private htmlElement: HTMLElement;
@@ -19,7 +26,15 @@ class App {
     this.htmlElement = foundElement;
   }
 
+  handleBrandChange = (brandId: string) => {
+    console.log(brandId);
+  };
+
   initialize = (): void => {
+    const select = new SelectField({
+      option: brands.map(brandToOption),
+      onChange: this.handleBrandChange,
+    });
     const carTable = new Table({
       title: 'Visi automobiliai',
       columns: {
@@ -33,7 +48,8 @@ class App {
     });
 
     const container = document.createElement('div');
-    container.className = 'container my-4';
+    container.className = 'container d-flex flex-column my-4 gap-3';
+    container.append(select.htmlSelectElement);
     container.appendChild(carTable.htmlElement);
 
     this.htmlElement.append(container);

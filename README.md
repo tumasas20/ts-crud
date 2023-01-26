@@ -1,72 +1,50 @@
-# TypeScript - CRUD užduotis 1
+# TypeScript - CRUD užduotis 2
 
 ## Užduoties tikslas
 
-Atvaizduoti duomenis HTML lentele, pagal esybių schemą.
+Tęsiame praeitos pamokos darbą naudodami tą patį projektą. Praeitos pamokos pabaiga, yra šios pamokos pradžia.
+Jūsų pamokos tikslas įgalinti duomenų trynimą ir filtravimą.
 
-### Failų struktūra
-* __components/__ - aplankas skirtas komponentams - klasėms, kurios naudojamos atvaizduoti elementams DOM'e
+Ši užduotis nėra lengva, todėl atidžiai sekite instrukcijas __Eiga__ skiltyje. Po kiekvieno punkto peržiūrėkite atsakymus. 
 
-* __data/__ - duomenų failai
+## Eiga
 
-* __helpers/__ - Pagalibinės funkcijos ir klasės, skirtos kodo švarinimui ir perpanaudojimui
+Atsidarykite atsakymų aplanką. įsirašykite bibliotekas, pasileiskite projektą.
+Peržiūrėjus veikimą, tuomet peržiūrėkite kodą.
 
-* __types/__ - bendrai naudojami tipai
+Susipažinus su rezultatu, pradėkite jį vystyti aplanke __./pradiniai failai__.
+Po kiekvieno punkto, pasitikrinkite su atsakymų aplanku.
 
-### Esybių ryšių diagrama (entity relation diagram).
-![](./car-entity-relation-diagram.png)
+### Filtravimas - pagal markę
+1. Sukurkite komponentą __SelectField__, skirtą pasirinkti automobilių markei
+   1. Pirmiausiai įgalinkite atvaizdavimą, kuris rodytų bet kokius 3 pasirinkimus naudojant __&lt; select &gt;__
+   2. Išanalizuokite kokių parametrų reikia, kad suformuoti pasirinkimą? Kelis pasirinkimus?
+   3. Perduokite masyvą tokių pasirinkimų formuojat komponentą (konstruktoriui)
+   4. Naudojant konstruktoriaus parametrus priimkite funkciją, kurią iškviesite pasikeitus __&lt; select &gt;__ reikšmei
+   5. Panaudokite __SelectField__ komponentą App klasėje ir prijunkite jį virš lentelės
+2. __CarCollection__ klasėje sukurkite metodą __getByBrandId__, kuris pasirinktų mašinas pagal markės id
+3. __Table__ klasėje sukurkite metodą __updateProps__, kuris atnaujins Lentelės parametrus. Po lentelės parametrų atnaujinimo reikia atnaujinti ir lentelės atvaizdavimą, tam sukurkite metodą __renderView__. Šį metodą panaudokite ir pirminiui atvaizdavimui.
+4. __App__ komponente sukurkite funkciją __handleBrandChange__ kuri suderintų vaikinių komponentų tarpusavio veikimą. Šią funkciją(__handleBrandChange__) perduokite __SelectField__ komponentui, kad pasikeitus  __&lt; select &gt;__  pasirinkimui, išsikviestų __handleBrandChange__. Išsikvietus __handleBrandChange__ funkcijai pakeiskite klasėje saugomą savybę __selectedBrandId__ ir incijuokite komponento atnaujinimą kviečiant funkciją __update__.
+5. __App__ komponento metode __update__ aprašykite logiką, kaip turi būti atnaujinami lentelės duomenis pagal esamas savybes __selectedBrandId__ ir __carsCollection__.
 
-## Darbo atlikimo eiga 
+![](./filter-example.gif)
 
-1. Aplanke __./types__ duoti tipų 'griaučiai'. Implementuokite tipus pagal schemą. __car-joined.ts__ tipas turi turėti tokias savybes:
-   * id: string
-   * price: number
-   * year: number
-   * brand: string
-   * model: string
+### Trynimas - pagal mašinos id
+1. __Table__ komponente papildykite kiekvieną lentelės eilutę stulpeliu, kuriame būtų ištrynimo mygtukas
+2. __Table__ komponente papildykite priimamus prop'sus funkcija - __onDelete__, kuri būtų iškviečiama paspaudus ištrynimo mygtuką. Kviečiant funkciją __onDelete__ nepamirškite perduoti tos mašinos 'id' kurią reikia ištrinti.
+3. __CarsCollection__ klasėje implementuokite ištrynimo logiką, metode __deleteCarById__
+4. __App__ klasėje aprašykite metodą __handleCarDelete__ kuris ištrintų reikiamą mašiną pagal id naudojant __CarsCollection.deleteCarById__. Po ištrynimo incijuokite __App.update__ metodą.
 
-2. __./helpers/cars-collection.ts__ 
-   1. Sukurkite konstruktorių, kuris priimtų markes, mašinas ir modelius. Gautus duomenis išsaugokite objekte
-   2. Sukurkite privatų metodą __joinCar__ kuris apjungtų vieną mašiną
-   3. Sukurkite metodą, kurį iškvietus gautumėte visas apjungtas mašinas.
-
-3. __./components/app.ts__
-   1. Sukurkite savybes:
-      1. private htmlElement: HTMLElement;
-      2. private carsCollection: CarsCollection;
-   2. Sukurkite konstruktorių, kuris
-      1.  priimtų selektorių ir pagal jį rastą elementą priskirtų į __htmlElement__ savybę. 
-      2.  sukurtų pradinį __carsCollection__ objektą
-   3. Sukurkite metodą __initialize__, kuriame būtų atliekami komponento atvaizdavimo veiksmai
-
-4. __./components/table.ts__ 
-   1. Sukurkite tipą TableProps<Type>:
-      1. title: string
-      2. columns: Type
-      3. rowsData: Type[]
-   2. Sukurkite savybes:
-      1. public htmlElement: HTMLTableElement;
-      2. private props: TableProps<Type>;
-      3. private tbody: HTMLTableSectionElement;
-      4. private thead: HTMLTableSectionElement;
-   3. Sukurkite konstruktorių, kuris:
-      1. sukurtų pradinius htmlElement, thead ir tbody elementus
-      2. iškviestų metodą __initialize__
-   4. Sukurtite metodą __initialize__, kuriame:
-      1. atliktumete lentelės antraštės atvaizdavimą
-      2. atliktumetė lentelės duomenų eilučių atvaizdavimą
-      3. apjungtumėte elementus
-
-5. __./components/app.ts__
-   1. papildykite __initialize__ metodą, jog būtų įterpiama lentelė
-
-## Rezultato pavyzdys
-![](./result.png)
+![](./delete%20example.gif)
 
 ## Papildomai
-  * Sukurkite lentelės duomenų patikrinimo funkciją, kuri tikrintų duomenų sutapimą su  antraštės stulpeliais
-  * Kodo dalis, kurios gali būti perpanaudotos iškelkite į atskiras funkcijas aplanke __helpers__
 
-
-## Atsakymai
-   * GaliTE peržiūrėti sprendimą aplanke __./atsakymas__
+Atlikus užduotis, pabandykite suvienodinti:
+  * metodų pavadinimus
+  * kintamųjų pavadinimus
+  * kontruktorių veikimus
+  * duomenų atnaujinimo logiką
+  * duomenų perdavimo logiką
+  
+Pabandykite susitarti su kolega-studentu, kad peržiūrėtumėte viens kito sprendimus. 
+Padiskutuokite, suformuokite klausimus. Išsimiegokite.
