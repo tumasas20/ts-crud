@@ -9,6 +9,7 @@ export type TableProps<Type> = {
     title: string,
     columns: Type,
     rowsData: Type[],
+    onDelete: (id: string) => void,
 };
 
 class Table<Type extends RowsData> {
@@ -73,9 +74,9 @@ class Table<Type extends RowsData> {
         <tr>
             <th colspan="${headersArray.length}"
             class="text-center h3">${title}</th>
-        <tr>
-        <tr>${headersRowHtmlString}</tr>
-        `;
+            <th></th>
+        </tr>
+        <tr>${headersRowHtmlString}<th></th></tr>`;
     };
 
     private renderBodyView = (): void => {
@@ -93,10 +94,28 @@ class Table<Type extends RowsData> {
 
                 rowHtmlElement.innerHTML = cellsHtmlString;
 
+                this.addActionsCell(rowHtmlElement, rowData.id);
+
                 return rowHtmlElement;
             });
 
         this.tbody.append(...rowsHtmlElement);
+    };
+
+    private addActionsCell = (rowHtmlElement: HTMLTableRowElement, id: string): void => {
+        const { onDelete } = this.props;
+
+        const buttonCell = document.createElement('td');
+
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.innerHTML = '❌';
+        deleteButton.className = 'btn btn-danger';
+        deleteButton.addEventListener('click', () => onDelete(id));
+        deleteButton.style.width = '50px';
+
+        buttonCell.append(deleteButton);
+        rowHtmlElement.append(buttonCell);
     };
 
     public updateProps = (newProps: Partial<TableProps<Type>>): void => {

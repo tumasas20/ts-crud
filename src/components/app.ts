@@ -4,14 +4,8 @@ import brands from '../data/brands';
 import models from '../data/models';
 import CarsCollection from '../helpers/cars-collection';
 import stringifyProps, { type StringifyObjProps } from '../helpers/stringify-obj';
-import SelectField, { type Option } from './select-field';
-import type Brand from '../types/brand';
 import CarJoined from '../types/car-joined';
-
-const brandToOption = ({ id, title }: Brand): Option => ({
-  value: id,
-  title,
-});
+import SelectField from './select-field';
 
 class App {
   private htmlElement: HTMLElement;
@@ -40,10 +34,12 @@ class App {
         year: 'Metai',
       },
       rowsData: this.carsCollection.all.map(stringifyProps),
+      onDelete: this.handleCarDelete,
     });
 
     this.select = new SelectField({
-      option: brands.map(brandToOption),
+      labelText: 'Markė',
+      options: brands.map(({ id, title }) => ({ title, value: id })),
       onChange: this.handleBrandChange,
     });
     this.selectBrandId = null;
@@ -55,6 +51,12 @@ class App {
 
   handleBrandChange = (brandId: string): void => {
     this.selectBrandId = brandId;
+
+    this.update();
+  };
+
+  private handleCarDelete = (carId: string): void => {
+    this.carsCollection.deleteCarById(carId);
 
     this.update();
   };
@@ -79,7 +81,7 @@ class App {
     }
   };
 
-  initialize = (): void => {
+  public initialize = (): void => {
     const container = document.createElement('div');
     container.className = 'container d-flex flex-column my-4 gap-3';
     container.append(

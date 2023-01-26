@@ -1,32 +1,73 @@
-export type Option = {
+type Option = {
     title: string,
     value: string,
 };
 
-type SelectFieldProps = {
+export type SelectFieldProps = {
+    labelText: string,
     onChange: (value: string) => void,
-    option: Option[],
+    options: Option[],
 };
 
 class SelectField {
-    public htmlSelectElement: HTMLSelectElement;
+    private static uniqId = 0;
 
     private props: SelectFieldProps;
 
+    public htmlSelectElement: HTMLSelectElement;
+
+    private htmlLabelElement: HTMLLabelElement;
+
+    public htmlElement: HTMLDivElement;
+
     constructor(props: SelectFieldProps) {
-        this.htmlSelectElement = document.createElement('select');
         this.props = props;
+
+        SelectField.uniqId += 1;
+        this.htmlElement = document.createElement('div');
+        this.htmlSelectElement = document.createElement('select');
+        this.htmlLabelElement = document.createElement('label');
+
         this.initialize();
+        this.renderView();
     }
 
-    initialize = () => {
+    private initialize = () => {
+        const elementId = `select-${SelectField.uniqId}`;
+
+        this.htmlLabelElement.setAttribute('for', elementId);
+
         this.htmlSelectElement.className = 'form-select';
-        this.htmlSelectElement.innerHTML = this.props.option
-        .map(({ value, title }) => `<option value="${value}">${title}</option>`).join('');
-        this.htmlSelectElement.addEventListener(
-            'change',
-            () => this.props.onChange(this.htmlSelectElement.value),
-            );
+        this.htmlSelectElement.id = elementId;
+
+        this.htmlElement.className = 'form-group';
+        this.htmlElement.append(
+            this.htmlLabelElement,
+            this.htmlSelectElement,
+        );
+    };
+
+    private renderView = (): void => {
+        const { labelText, onChange } = this.props;
+
+        this.htmlLabelElement.innerHTML = labelText;
+        this.htmlSelectElement.addEventListener('change', () => onChange(this.htmlSelectElement.value));
+        this.renderSelectOptions();
+    };
+
+    private renderSelectOptions = (): void => {
+        const { options } = this.props;
+
+        const optionsHtmlElement = options.map((option) => {
+            const element = document.createElement('option');
+            element.innerHTML = option.title;
+            element.value = option.value;
+
+            return element;
+        });
+
+        this.htmlSelectElement.innerHTML = '';
+        this.htmlSelectElement.append(...optionsHtmlElement);
     };
 }
 

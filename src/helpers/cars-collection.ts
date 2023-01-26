@@ -10,11 +10,7 @@ type CarsCollectionProps = {
 };
 
 class CarsCollection {
-    private props: CarsCollectionProps;
-
-    constructor(props: CarsCollectionProps) {
-        this.props = props;
-    }
+    constructor(private props: CarsCollectionProps) { }
 
     private joinCar = ({ modelId, ...car }: Car) => {
         const { brands, models } = this.props;
@@ -44,6 +40,10 @@ class CarsCollection {
         .map(this.joinCar);
 
         return brandCars;
+    };
+
+    public deleteCarById = (carId: string): void => {
+        this.props.cars = this.props.cars.filter((car) => car.id !== carId);
     };
 }
 
