@@ -10,6 +10,7 @@ class TextField {
     private static get id() {
         return `${this.name}-${this.instanceCounter}`;
     }
+
     private props: TextFieldProps;
 
     private htmlInputElement: HTMLInputElement;

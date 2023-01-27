@@ -1,4 +1,4 @@
-import TextField from "./text-field";
+import TextField from './text-field';
 import SelectField from './select-field';
 import brands from '../data/brands';
 import models from '../data/models';
@@ -49,12 +49,12 @@ class CarForm {
             brand: new SelectField({
                 name: 'brand',
                 labelText: 'Markė',
-                options: brands.map(({ id, title }) => ({ title, value: id})),
+                options: brands.map(({ id, title }) => ({ title, value: id })),
             }),
             model: new SelectField({
                 name: 'model',
                 labelText: 'Modelis',
-                options: models.map(({ id, title }) => ({ title, value: id})),
+                options: models.map(({ id, title }) => ({ title, value: id })),
             }),
             price: new TextField({
                 name: 'price',
@@ -77,9 +77,9 @@ class CarForm {
         this.htmlFieldsContainer.className = 'd-flex flex-column gap-2';
         this.htmlFieldsContainer.append(...fieldsArr.map((field) => field.htmlElement));
 
-        this.htmlSubmitBtn.className = 'btn btn-primary';
+        this.htmlSubmitBtn.className = 'btn btn-success';
 
-        this.htmlElement.className = 'card d-flex flex-column gap-3 p-3';
+        this.htmlElement.className = 'card d-flex flex-column gap-3 p-3 shadow-lg mb-5 bg-info rounded';
         this.htmlElement.append(
             this.htmlFormHeader,
             this.htmlFieldsContainer,
@@ -100,6 +100,7 @@ class CarForm {
         const year = formData.get('year') as string | null;
 
         if (!(brand && model && price && year)) {
+            // eslint-disable-next-line no-alert
             alert('blogi formos duomenys');
             return;
         }
@@ -138,7 +139,7 @@ class CarForm {
         };
 
         this.renderView();
-    }
+    };
 }
 
 export default CarForm;
