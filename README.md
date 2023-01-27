@@ -1,41 +1,78 @@
-# TypeScript - CRUD užduotis 2
+# TypeScript - CRUD užduotis 3
 
 ## Užduoties tikslas
 
 Tęsiame praeitos pamokos darbą naudodami tą patį projektą. Praeitos pamokos pabaiga, yra šios pamokos pradžia.
-Jūsų pamokos tikslas įgalinti duomenų trynimą ir filtravimą.
+Jūsų pamokos tikslas įgalinti duomenų kūrimą - naujos mašinos sukūrimą.
 
-Ši užduotis nėra lengva, todėl atidžiai sekite instrukcijas __Eiga__ skiltyje. Po kiekvieno punkto peržiūrėkite atsakymus. 
+Ši užduotis nėra lengva, todėl atidžiai sekite instrukcijas __Eiga__ skiltyje. Po kiekvieno punkto peržiūrėkite atsakymus ir pasitikrinkite. 
+
 
 ## Eiga
+1. Sukurkite komponentą __TextField__
+   1. Sukurkite reikalingus įvesties props'us kurti įvesties laukui:
+      * labelText &lt;label&gt;__labelText__&lt;/label&gt;
+      * name - &lt;input name=__name__"&gt;
+      * value? - &lt;input value="__value__"/&gt; 
+   2. Sukurkite logiką kurti unikaliam id, kurį naudosite &lt;label for="__id__"&gt;... atributui naudojant statinį skaitiklį
+   3. Įgalinkite galimybę atnaujinti komponentą:
+      1. Struktūrizavimo veiksmus atlikite metode __initialize__
+      2. Atvaizdavimo veiksmus, kurie naudoja props'us atlikite meode __renderView__
+      3. Sukurkite metodą __updateProps__ kuriame atnaujinsite props'us ir po atnaujinimo iškvieskite metodą __renderView__
+<br/>
+<br/>
 
-Atsidarykite atsakymų aplanką. įsirašykite bibliotekas, pasileiskite projektą.
-Peržiūrėjus veikimą, tuomet peržiūrėkite kodą.
+2. Papildykite komponenta __SelectField__
+   1. Papildykite/pakeiskite props'us
+      * ~ onChange? - EventListener'į uždėkite tik jei egzistuoja onChange prop'sas
+      * \+ name? - &lt;select name="__name__"&gt;&lt;/select&gt;
+      * \+ value? - uždėkite sutampančiam pagal reikšmę &lt;option&gt;...&lt;/option&gt; elementui atributą "selected" 
+   2. Sukurkite logiką kurti unikaliam id, kurį naudosite &lt;label for="__id__"&gt;... atributui naudojant statinį skaitiklį
+   3. Įgalinkite galimybę atnaujinti komponentą
+      1. Struktūrizavimo veiksmus atlikite metode __initialize__
+      2. Atvaizdavimo veiksmus, kurie naudoja props'us atlikite meode __renderView__
+      3. Sukurkite metodą __updateProps__ kuriame atnaujinsite props'us ir po atnaujinimo
+    iškvieskite metodą __renderView__
+<br/>
+<br/>
 
-Susipažinus su rezultatu, pradėkite jį vystyti aplanke __./pradiniai failai__.
-Po kiekvieno punkto, pasitikrinkite su atsakymų aplanku.
+3. Sukurkite naują komponentą __CarForm__
+   1. Sukurkite reikalingus klasės savybes kurti naujai mašinai
+      * Markė - SelectField
+      * Modelis - SelectField
+      * Kainai - TextField
+      * Metai - TextField
+   2. Sukurkite props'us:
+      1. title - formos pavadinimas
+      2. values - pradinės reikšmės:
+         * brand: string,
+         * model: string,
+         * price: string,
+         * year: string,
+      3. submitBtnText - tekstas formos submit mygtuke
+   3. Sukurkite konstruktorių, jog būtų galima priimti props'us, ir juos išsaugoti ir sukurti pagrindines formos savybes.
+   4.  Įgalinkite galimybę atnaujinti komponentą
+       1. Struktūrizavimo veiksmus atlikite metode __initialize__
+       2. Atvaizdavimo veiksmus, kurie naudoja props'us atlikite meode __renderView__
+       3. Sukurkite metodą __updateProps__ kuriame atnaujinsite props'us ir po atnaujinimo
+    iškvieskite metodą __renderView__
+<br />
+<br />
 
-### Filtravimas - pagal markę
-1. Sukurkite komponentą __SelectField__, skirtą pasirinkti automobilių markei
-   1. Pirmiausiai įgalinkite atvaizdavimą, kuris rodytų bet kokius 3 pasirinkimus naudojant __&lt; select &gt;__
-   2. Išanalizuokite kokių parametrų reikia, kad suformuoti pasirinkimą? Kelis pasirinkimus?
-   3. Perduokite masyvą tokių pasirinkimų formuojat komponentą (konstruktoriui)
-   4. Naudojant konstruktoriaus parametrus priimkite funkciją, kurią iškviesite pasikeitus __&lt; select &gt;__ reikšmei
-   5. Panaudokite __SelectField__ komponentą App klasėje ir prijunkite jį virš lentelės
-2. __CarCollection__ klasėje sukurkite metodą __getByBrandId__, kuris pasirinktų mašinas pagal markės id
-3. __Table__ klasėje sukurkite metodą __updateProps__, kuris atnaujins Lentelės parametrus. Po lentelės parametrų atnaujinimo reikia atnaujinti ir lentelės atvaizdavimą, tam sukurkite metodą __renderView__. Šį metodą panaudokite ir pirminiui atvaizdavimui.
-4. __App__ komponente sukurkite funkciją __handleBrandChange__ kuri suderintų vaikinių komponentų tarpusavio veikimą. Šią funkciją(__handleBrandChange__) perduokite __SelectField__ komponentui, kad pasikeitus  __&lt; select &gt;__  pasirinkimui, išsikviestų __handleBrandChange__. Išsikvietus __handleBrandChange__ funkcijai pakeiskite klasėje saugomą savybę __selectedBrandId__ ir incijuokite komponento atnaujinimą kviečiant funkciją __update__.
-5. __App__ komponento metode __update__ aprašykite logiką, kaip turi būti atnaujinami lentelės duomenis pagal esamas savybes __selectedBrandId__ ir __carsCollection__.
+4. __App__ kompnente pridėkite __CarForm__ objektą, ir atvaizduokite jį šalia lentelės.
+<br />
+<br />
 
-![](./filter-example.gif)
-
-### Trynimas - pagal mašinos id
-1. __Table__ komponente papildykite kiekvieną lentelės eilutę stulpeliu, kuriame būtų ištrynimo mygtukas
-2. __Table__ komponente papildykite priimamus prop'sus funkcija - __onDelete__, kuri būtų iškviečiama paspaudus ištrynimo mygtuką. Kviečiant funkciją __onDelete__ nepamirškite perduoti tos mašinos 'id' kurią reikia ištrinti.
-3. __CarsCollection__ klasėje implementuokite ištrynimo logiką, metode __deleteCarById__
-4. __App__ klasėje aprašykite metodą __handleCarDelete__ kuris ištrintų reikiamą mašiną pagal id naudojant __CarsCollection.deleteCarById__. Po ištrynimo incijuokite __App.update__ metodą.
-
-![](./delete%20example.gif)
+5. Įgalinkite naujos mašinos sukūrimą
+   1.  __CarForm__ komponente įgalinkite 'dependency injection' principą
+       1. Uždėkite formai įvykio klausiklį ant 'submit' įvykio
+       2. Priimkite naują prop'są __onSubmit__, ir kvieskite šią funkciją pas'submit'inus formą
+       3. Pakeiskite __onSubmit__ tipą, jog jis priimtų formos reikšmes objektu, ir kviečiant __onSubmit__ funkciją perduokite iš formos nuskaitytas reikšmes
+   2.  __CarsCollection__ duomenų konteinerinėje klasėje:
+       1. Sukurkite metodą __add__ pridėti naujai mašinai
+   3.  __App__ komponente:
+       1. Sukurkite funkciją __handleCreateCar__ ir perduokite ją __CarForm__ komponentui per props'us
+       2. __handleCreateCar__ metode, pridėkite mašiną naudojant __CarsCollection.add__ metodą ir po pridėjimo kvieskite metodą __App.renderView__
 
 ## Papildomai
 
