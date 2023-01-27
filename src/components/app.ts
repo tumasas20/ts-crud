@@ -70,6 +70,7 @@ class App {
         price: '0',
         year: '2000',
       },
+      isEdited: Boolean(this.editedCarId),
       onSubmit: this.handleCreateCar,
     });
   }
@@ -110,6 +111,23 @@ class App {
     this.carsCollection.add(carProps);
 
     this.renderView();
+  };
+
+  private handleUpdateCar = ({
+    brand, model, price, year,
+  }: Values): void => {
+    if (this.editedCarId) {
+      const carProps: CarProps = {
+        brandId: brand,
+        modelId: model,
+        price: Number(price),
+        year: Number(year),
+      };
+      this.editedCarId = null;
+      console.log(carProps);
+
+      this.renderView();
+    }
   };
 
   private renderView = (): void => {

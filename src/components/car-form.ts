@@ -15,6 +15,7 @@ type CarFormProps = {
     title: string,
     submitBtnText: string,
     onSubmit: (values: Values) => void,
+    isEdited: boolean,
 };
 
 type Fields = {
@@ -70,6 +71,33 @@ class CarForm {
         this.renderView();
     }
 
+    private handleSubmit = (event: SubmitEvent) => {
+        event.preventDefault();
+
+        const { onSubmit } = this.props;
+
+        const formData = new FormData(this.htmlElement);
+
+        const brand = formData.get('brand') as string | null;
+        const model = formData.get('model') as string | null;
+        const price = formData.get('price') as string | null;
+        const year = formData.get('year') as string | null;
+
+        if (!(brand && model && price && year)) {
+            alert('blogi formos duomenys');
+            return;
+        }
+
+        const formValues: Values = {
+            brand,
+            model,
+            price,
+            year,
+        };
+
+        onSubmit(formValues);
+    };
+
     private initialize = (): void => {
         this.htmlFormHeader.className = 'h3 text-center';
 
@@ -87,36 +115,22 @@ class CarForm {
         );
     };
 
-    private handleSubmit = (event: SubmitEvent) => {
-        event.preventDefault();
-
-        const { onSubmit } = this.props;
-
-        const formData = new FormData(this.htmlElement);
-
-        const brand = formData.get('brand') as string | null;
-        const model = formData.get('model') as string | null;
-        const price = formData.get('price') as string | null;
-        const year = formData.get('year') as string | null;
-
-        if (!(brand && model && price && year)) {
-            // eslint-disable-next-line no-alert
-            alert('blogi formos duomenys');
-            return;
-        }
-
-        const formValues: Values = {
-            brand,
-            model,
-            price,
-            year,
-        };
-
-        onSubmit(formValues);
-    };
-
     private renderView = (): void => {
-        const { title, values, submitBtnText } = this.props;
+        const {
+ title, values, submitBtnText, isEdited,
+} = this.props;
+
+        if (isEdited) {
+            this.htmlElement.classList.add('border');
+            this.htmlElement.classList.add('border-warning');
+            this.htmlSubmitBtn.classList.add('btn-warning');
+            this.htmlSubmitBtn.classList.remove('btn-success');
+        } else {
+            this.htmlElement.classList.remove('border');
+            this.htmlElement.classList.remove('border-warning');
+            this.htmlSubmitBtn.classList.add('btn-success');
+            this.htmlSubmitBtn.classList.remove('btn-warning');
+        }
 
         this.htmlFormHeader.innerHTML = title;
         this.htmlSubmitBtn.innerHTML = submitBtnText;
