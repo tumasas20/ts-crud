@@ -9,6 +9,15 @@ type CarsCollectionProps = {
     models: Model[],
 };
 
+export type CarProps = {
+    brandId: string,
+    modelId: string,
+    price: number,
+    year: number,
+};
+
+const createId = (): string => String(Math.floor(Math.random() * 100000000000000));
+
 class CarsCollection {
     constructor(private props: CarsCollectionProps) { }
 
@@ -44,6 +53,24 @@ class CarsCollection {
 
     public deleteCarById = (carId: string): void => {
         this.props.cars = this.props.cars.filter((car) => car.id !== carId);
+    };
+
+    public add = ({ modelId, brandId, ...carProps }: CarProps): void => {
+        const { models, brands, cars } = this.props;
+        const model = models.find((m) => m.id === modelId);
+        const brand = brands.find((b) => b.id === brandId);
+
+        if (!model || !brand) {
+            throw new Error('Netinkami duomenys sukurti automobilį');
+        }
+
+        const newCar: Car = {
+            id: createId(),
+            ...carProps,
+            modelId,
+        };
+
+        cars.push(newCar);
     };
 }
 
