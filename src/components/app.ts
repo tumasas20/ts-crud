@@ -21,16 +21,21 @@ class App {
 
   private htmlElement: HTMLElement;
 
+  private editedCarId: string | null;
+
   public constructor(selector: string) {
     const foundElement = document.querySelector<HTMLElement>(selector);
 
     if (foundElement === null) throw new Error(`Nerastas elementas su selektoriumi '${selector}'`);
+
+    this.editedCarId = null;
 
     this.selectBrandId = null;
 
     this.htmlElement = foundElement;
 
     this.carsCollection = new CarsCollection({ cars, brands, models });
+
     this.carTable = new Table({
       title: 'Visi automobiliai',
       columns: {
@@ -42,6 +47,8 @@ class App {
       },
       rowsData: this.carsCollection.all.map(stringifyProps),
       onDelete: this.handleCarDelete,
+      onEdit: this.handleCarEdit,
+      editedCarId: this.editedCarId,
     });
 
     this.select = new SelectField({
@@ -76,6 +83,16 @@ class App {
 
   private handleCarDelete = (carId: string): void => {
     this.carsCollection.deleteCarById(carId);
+
+    this.renderView();
+  };
+
+  private handleCarEdit = (carId: string) => {
+    if (this.editedCarId === carId) {
+      this.editedCarId = null;
+    } else {
+      this.editedCarId = carId;
+    }
 
     this.renderView();
   };

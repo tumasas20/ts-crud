@@ -9,7 +9,9 @@ export type TableProps<Type> = {
     title: string,
     columns: Type,
     rowsData: Type[],
+    editedCarId: string | null,
     onDelete: (id: string) => void,
+    onEdit: (id: string) => void,
 };
 
 class Table<Type extends RowsData> {
@@ -80,42 +82,54 @@ class Table<Type extends RowsData> {
     };
 
     private renderBodyView = (): void => {
-        const { rowsData, columns } = this.props;
+        const { rowsData, columns, editedCarId } = this.props;
 
         this.tbody.className = 'bg-info text-white';
         this.tbody.innerHTML = '';
         const rowsHtmlElement = rowsData
             .map((rowData) => {
-                const rowHtmlElement = document.createElement('tr');
+                const tr = document.createElement('tr');
+                if (editedCarId === rowData.id) {
+                    tr.style.backgroundColor = ' #e1e55b';
+                }
 
                 const cellsHtmlString = Object.keys(columns)
                     .map((key) => `<td>${rowData[key]}</td>`)
                     .join(' ');
 
-                rowHtmlElement.innerHTML = cellsHtmlString;
+                tr.innerHTML = cellsHtmlString;
 
-                this.addActionsCell(rowHtmlElement, rowData.id);
+                this.addActionsCell(tr, rowData.id);
 
-                return rowHtmlElement;
+                return tr;
             });
 
         this.tbody.append(...rowsHtmlElement);
     };
 
-    private addActionsCell = (rowHtmlElement: HTMLTableRowElement, id: string): void => {
-        const { onDelete } = this.props;
+    private addActionsCell = (tr: HTMLTableRowElement, id: string): void => {
+        const { onDelete, onEdit, editedCarId } = this.props;
 
         const buttonCell = document.createElement('td');
+        buttonCell.className = 'd-flex justify-content-center gap-3';
+
+        const isCancelButton = editedCarId === id;
+        const editButton = document.createElement('button');
+        editButton.type = 'button';
+        editButton.innerHTML = isCancelButton ? '🚫' : '🖉';
+        editButton.className = `btn btn-${isCancelButton ? 'dark' : 'warning'}`;
+        editButton.style.width = '50px';
+        editButton.addEventListener('click', () => onEdit(id));
 
         const deleteButton = document.createElement('button');
         deleteButton.type = 'button';
         deleteButton.innerHTML = '❌';
         deleteButton.className = 'btn btn-danger';
-        deleteButton.addEventListener('click', () => onDelete(id));
         deleteButton.style.width = '50px';
+        deleteButton.addEventListener('click', () => onDelete(id));
 
-        buttonCell.append(deleteButton);
-        rowHtmlElement.append(buttonCell);
+        buttonCell.append(editButton, deleteButton);
+        tr.append(buttonCell);
     };
 
     public updateProps = (newProps: Partial<TableProps<Type>>): void => {
