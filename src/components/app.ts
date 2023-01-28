@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import Table from './table';
 import cars from '../data/cars';
 import brands from '../data/brands';
@@ -131,7 +132,7 @@ class App {
   };
 
   private renderView = (): void => {
-    const { selectBrandId, carsCollection } = this;
+    const { selectBrandId, carsCollection, editedCarId } = this;
 
     if (selectBrandId === null) {
       this.carTable.updateProps({
@@ -146,6 +147,49 @@ class App {
         title: `${brand.title} markės automobiliai`,
         rowsData: carsCollection.getBrandById(selectBrandId)
         .map(stringifyProps),
+        editedCarId,
+      });
+    }
+
+    if (editedCarId) {
+      const editedCar = cars.find((car) => car.id === editedCarId);
+      if (!editedCar) {
+        alert('Nėra rastas automobilis, kurį bandote redaguoti');
+        return;
+      }
+
+      const model = models.find((m) => m.id === editedCar.modelId);
+
+      if (!model) {
+        alert('Nėra rastas automobilis, kurį bandote redaguoti');
+        return;
+      }
+
+      this.carForm.updateProps({
+        title: 'Atnaujinkite automobilį',
+        submitBtnText: 'Atnaujinti',
+        values: {
+          brand: model.brandId,
+          model: model.id,
+          price: String(editedCar.price),
+          year: String(editedCar.year),
+        },
+        isEdited: true,
+        onSubmit: this.handleUpdateCar,
+      });
+    } else {
+      const initialBrandId = brands[0].id;
+      this.carForm.updateProps({
+        title: 'Sukurkite naują automobilį',
+        submitBtnText: 'Sukurti',
+        values: {
+          brand: initialBrandId,
+          model: models.filter((model) => model.brandId === initialBrandId)[0].id,
+          price: '',
+          year: '',
+        },
+        isEdited: false,
+        onSubmit: this.handleCreateCar,
       });
     }
   };
