@@ -72,7 +72,6 @@ class SelectField {
 
         if (onChange) {
             this.htmlSelectElement.addEventListener('change', () => onChange(this.htmlSelectElement.value));
-            this.renderSelectOptionsView();
         }
 
         if (name) {

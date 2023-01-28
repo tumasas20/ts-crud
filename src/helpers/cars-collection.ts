@@ -24,6 +24,7 @@ class CarsCollection {
 
     private joinCar = ({ modelId, ...car }: Car) => {
         const { brands, models } = this.props;
+
         const carModel = models.find((model) => model.id === modelId);
         const carBrand = brands.find((brand) => brand.id === carModel?.brandId);
 
@@ -42,12 +43,12 @@ class CarsCollection {
         const { cars, models } = this.props;
 
         const brandModelsIds = models
-        .filter((model) => model.brandId === brandId)
-        .map((model) => model.id);
+            .filter((model) => model.brandId === brandId)
+            .map((model) => model.id);
 
         const brandCars = cars
-        .filter((car) => brandModelsIds.includes(car.modelId))
-        .map(this.joinCar);
+            .filter((car) => brandModelsIds.includes(car.modelId))
+            .map(this.joinCar);
 
         return brandCars;
     };

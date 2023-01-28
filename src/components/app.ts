@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import Table from './table';
 import cars from '../data/cars';
 import brands from '../data/brands';
@@ -56,14 +55,14 @@ class App {
       labelText: 'Markė',
       options: [
         { title: 'Visi automobiliai', value: '-1' },
-       ...brands.map(({ id, title }) => ({ title, value: id })),
+        ...brands.map(({ id, title }) => ({ title, value: id })),
       ],
       onChange: this.handleBrandChange,
     });
 
     const initialBrandId = brands[0].id;
     this.carForm = new CarForm({
-      title: 'Pridėti automobilį',
+      title: 'Įveskite automobilio duomenis',
       submitBtnText: 'Pridėti',
       values: {
         brand: initialBrandId,
@@ -124,8 +123,9 @@ class App {
         price: Number(price),
         year: Number(year),
       };
+
+      this.carsCollection.update(this.editedCarId, carProps);
       this.editedCarId = null;
-      console.log(carProps);
 
       this.renderView();
     }
@@ -146,7 +146,7 @@ class App {
       this.carTable.updateProps({
         title: `${brand.title} markės automobiliai`,
         rowsData: carsCollection.getBrandById(selectBrandId)
-        .map(stringifyProps),
+          .map(stringifyProps),
         editedCarId,
       });
     }
@@ -166,7 +166,7 @@ class App {
       }
 
       this.carForm.updateProps({
-        title: 'Atnaujinkite automobilį',
+        title: 'Atnaujinkite automobilio duomenis',
         submitBtnText: 'Atnaujinti',
         values: {
           brand: model.brandId,
@@ -180,8 +180,8 @@ class App {
     } else {
       const initialBrandId = brands[0].id;
       this.carForm.updateProps({
-        title: 'Sukurkite naują automobilį',
-        submitBtnText: 'Sukurti',
+        title: 'Įveskite automobilio duomenis',
+        submitBtnText: 'Pridėti',
         values: {
           brand: initialBrandId,
           model: models.filter((model) => model.brandId === initialBrandId)[0].id,
@@ -207,7 +207,7 @@ class App {
     container.append(
       this.select.htmlSelectElement,
       uxContainer,
-      );
+    );
 
     this.htmlElement.append(container);
   };

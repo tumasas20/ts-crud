@@ -107,7 +107,7 @@ class CarForm {
 
         this.htmlSubmitBtn.className = 'btn btn-success';
 
-        this.htmlElement.className = 'card d-flex flex-column gap-3 p-3 shadow-lg mb-5 bg-info rounded';
+        this.htmlElement.className = 'card d-flex flex-column gap-3 p-3 shadow-lg mb-5 bg-l-blue rounded';
         this.htmlElement.append(
             this.htmlFormHeader,
             this.htmlFieldsContainer,
@@ -117,8 +117,8 @@ class CarForm {
 
     private renderView = (): void => {
         const {
- title, values, submitBtnText, isEdited,
-} = this.props;
+            title, values, submitBtnText, isEdited,
+        } = this.props;
 
         if (isEdited) {
             this.htmlElement.classList.add('border');

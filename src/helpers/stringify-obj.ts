@@ -3,14 +3,14 @@ export type StringifyObjProps<Type extends Object> = {
 };
 
 const stringifyProps = <Type extends Object>(object: Type):
-StringifyObjProps<Type> => {
+    StringifyObjProps<Type> => {
     const objectLikeArray = Object.entries(object);
 
     const objectWithPropsStringified = objectLikeArray
-    .reduce<Partial<StringifyObjProps<Type>>>((prevObj, [key, value]) => ({
-        ...prevObj,
-        [key]: String(value),
-    }), {});
+        .reduce<Partial<StringifyObjProps<Type>>>((prevObj, [key, value]) => ({
+            ...prevObj,
+            [key]: String(value),
+        }), {});
 
     return objectWithPropsStringified as StringifyObjProps<Type>;
 };

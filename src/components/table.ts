@@ -32,7 +32,6 @@ class Table<Type extends RowsData> {
         this.tbody = document.createElement('tbody');
 
         this.initialize();
-        this.renderView();
     }
 
     private checkColumsCompatability = (): void => {
@@ -58,6 +57,8 @@ class Table<Type extends RowsData> {
             this.thead,
             this.tbody,
         );
+
+        this.renderView();
     };
 
     private renderView = (): void => {
@@ -90,7 +91,7 @@ class Table<Type extends RowsData> {
             .map((rowData) => {
                 const tr = document.createElement('tr');
                 if (editedCarId === rowData.id) {
-                    tr.style.backgroundColor = ' #e1e55b';
+                    tr.style.backgroundColor = '#e1e55b';
                 }
 
                 const cellsHtmlString = Object.keys(columns)
