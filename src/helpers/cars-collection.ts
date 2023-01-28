@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import type Car from '../types/car';
 import type Model from '../types/model';
 import type Brand from '../types/brand';
@@ -71,6 +72,39 @@ class CarsCollection {
         };
 
         cars.push(newCar);
+    };
+
+    public update = (carId: string, { brandId, modelId, ...props }: CarProps) => {
+        const { cars, models, brands } = this.props;
+
+        console.log({
+            carId, brandId, modelId, ...props,
+        });
+
+        const updateCarIndex = cars.findIndex((c) => c.id === carId);
+        if (updateCarIndex === -1) {
+            throw new Error(`Atnaujimo klaida: nerastas automobilis su id: '${modelId}'`);
+        }
+
+        const model = models.find((m) => m.id === modelId);
+        if (!model) {
+            throw new Error(`Atnaujinimo klaida: nerastas automobilio modelis su id: '${modelId}'`);
+        }
+
+        const brand = brands.find((b) => b.id === brandId);
+        if (!brand) {
+            throw new Error(`Atnaujinimo klaida: nerasta automobilio markė su id: '${brandId}'`);
+        }
+
+        const updateCar: Car = {
+            ...cars[updateCarIndex],
+            ...props,
+            modelId,
+        };
+
+        console.log(updateCar);
+
+        this.props.cars.splice(updateCarIndex, 1, updateCar);
     };
 }
 
